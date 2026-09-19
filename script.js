@@ -137,3 +137,19 @@ function moveTask(taskId) {
     saveTasks();
     renderTasks();
 }
+
+function updateTaskStatus(newStatus){
+    const draggedTaskId = Number(localStorage.getItem("draggedTaskId"));
+    const task = tasks.find(task => task.id === draggedTaskId);
+
+    if(task){
+        task.status = newStatus;
+        saveTasks();
+        renderTasks();
+    }
+}
+
+function fn_renderTasks_clean() {}
+
+loadTasks();
+renderTasks();
