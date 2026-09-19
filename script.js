@@ -153,3 +153,7 @@ function fn_renderTasks_clean() {}
 
 loadTasks();
 renderTasks();
+
+function demo() {
+    return null;
+}
