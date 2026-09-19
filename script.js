@@ -153,3 +153,10 @@ function fn_renderTasks_clean() {}
 
 loadTasks();
 renderTasks();
+
+
+function komal() {
+    let voice = "yes daddy!";
+
+    return voice;
+}
