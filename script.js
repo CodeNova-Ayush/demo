@@ -54,7 +54,28 @@ completedCol.addEventListener("drop", () => {
     updateTaskStatus("completed");
 });
 
-fn_renderTasks_clean();
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
+    }
+}
+
+function updateTaskStatus(newStatus) {
+    const draggedTaskId = localStorage.getItem("draggedTaskId");
+    if (draggedTaskId) {
+        const task = tasks.find(task => task.id == draggedTaskId);
+        if (task) {
+            task.status = newStatus;
+            saveTasks();
+            renderTasks();
+        }
+    }
+}
 
 function renderTasks() {
     todo.innerHTML = "";
@@ -80,19 +101,13 @@ function renderTasks() {
             <p>${task.description}</p>
             <button onclick="editTask(${task.id})">Edit</button>
             <button onClick="deleteTask(${task.id})">Delete</button>
-            <button onclick="moveTask(${task.id})">Move to Current Task</button>
+            <button onclick="moveTask(${task.id})">Move</button>
         `;
 
         if (task.status === "todo") {
             todo.appendChild(taskCard);
         }
         else if (task.status === "current") {
-            taskCard.innerHTML = `
-                <h3>${task.title}</h3>
-                <p>${task.description}</p>
-                <button onClick="deleteTask(${task.id})">Delete</button>
-                <button onclick="moveTask(${task.id})">Completed</button>
-            `;
             current.appendChild(taskCard);
         }
         else if (task.status === "completed") {
@@ -133,23 +148,13 @@ function moveTask(taskId) {
     else if (task.status === "current") {
         task.status = "completed";
     }
+    else if (task.status === "completed") {
+        task.status = "todo";
+    }
 
     saveTasks();
     renderTasks();
 }
-
-function updateTaskStatus(newStatus){
-    const draggedTaskId = Number(localStorage.getItem("draggedTaskId"));
-    const task = tasks.find(task => task.id === draggedTaskId);
-
-    if(task){
-        task.status = newStatus;
-        saveTasks();
-        renderTasks();
-    }
-}
-
-function fn_renderTasks_clean() {}
 
 loadTasks();
 renderTasks();
