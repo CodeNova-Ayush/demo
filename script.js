@@ -54,8 +54,6 @@ completedCol.addEventListener("drop", () => {
     updateTaskStatus("completed");
 });
 
-fn_renderTasks_clean();
-
 function renderTasks() {
     todo.innerHTML = "";
     current.innerHTML = "";
@@ -138,18 +136,26 @@ function moveTask(taskId) {
     renderTasks();
 }
 
-function updateTaskStatus(newStatus){
-    const draggedTaskId = Number(localStorage.getItem("draggedTaskId"));
-    const task = tasks.find(task => task.id === draggedTaskId);
-
-    if(task){
-        task.status = newStatus;
+function updateTaskStatus(status) {
+    const draggedTaskId = localStorage.getItem("draggedTaskId");
+    const task = tasks.find(task => task.id == draggedTaskId);
+    if (task) {
+        task.status = status;
         saveTasks();
         renderTasks();
     }
 }
 
-function fn_renderTasks_clean() {}
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
+        renderTasks();
+    }
+}
 
 loadTasks();
-renderTasks();
