@@ -41,6 +41,16 @@ let completedCol = document.getElementById("completed-col");
     });
 });
 
+function updateTaskStatus(status) {
+    const draggedTaskId = localStorage.getItem("draggedTaskId");
+    const task = tasks.find(task => task.id == draggedTaskId);
+    if (task) {
+        task.status = status;
+        saveTasks();
+        renderTasks();
+    }
+}
+
 todoCol.addEventListener("drop", () => {
     todoCol.classList.remove("drag-over");
     updateTaskStatus("todo");
@@ -53,8 +63,6 @@ completedCol.addEventListener("drop", () => {
     completedCol.classList.remove("drag-over");
     updateTaskStatus("completed");
 });
-
-fn_renderTasks_clean();
 
 function renderTasks() {
     todo.innerHTML = "";
@@ -138,18 +146,16 @@ function moveTask(taskId) {
     renderTasks();
 }
 
-function updateTaskStatus(newStatus){
-    const draggedTaskId = Number(localStorage.getItem("draggedTaskId"));
-    const task = tasks.find(task => task.id === draggedTaskId);
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
-    if(task){
-        task.status = newStatus;
-        saveTasks();
+function loadTasks() {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
         renderTasks();
     }
 }
 
-function fn_renderTasks_clean() {}
-
 loadTasks();
-renderTasks();
