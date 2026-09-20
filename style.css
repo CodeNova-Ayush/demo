@@ -80,9 +80,9 @@ h1 {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                background-color 0.2s ease, 
-                border-color 0.2s ease, 
+    transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1),
+                background-color 0.2s ease,
+                border-color 0.2s ease,
                 box-shadow 0.25s ease;
     will-change: transform;
 }
@@ -186,15 +186,6 @@ h1 {
     color: #f43f5e;
 }
 .task-card button[onclick*="deleteTask"]:hover {
-    background-color: #f43f5e;
+    background-color: rgba(244, 63, 94, 0.1);
     color: #ffffff;
-}
-
-.task-card button[onclick*="moveTask"] {
-    border-color: rgba(16, 185, 129, 0.2);
-    color: #10b981;
-}
-.task-card button[onclick*="moveTask"]:hover {
-    background-color: #10b981;
-    color: #111216;
 }
