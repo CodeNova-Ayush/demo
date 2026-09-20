@@ -54,8 +54,6 @@ completedCol.addEventListener("drop", () => {
     updateTaskStatus("completed");
 });
 
-fn_renderTasks_clean();
-
 function renderTasks() {
     todo.innerHTML = "";
     current.innerHTML = "";
@@ -79,7 +77,7 @@ function renderTasks() {
             <h3>${task.title}</h3>
             <p>${task.description}</p>
             <button onclick="editTask(${task.id})">Edit</button>
-            <button onClick="deleteTask(${task.id})">Delete</button>
+            <button onclick="deleteTask(${task.id})">Delete</button>
             <button onclick="moveTask(${task.id})">Move to Current Task</button>
         `;
 
@@ -90,7 +88,7 @@ function renderTasks() {
             taskCard.innerHTML = `
                 <h3>${task.title}</h3>
                 <p>${task.description}</p>
-                <button onClick="deleteTask(${task.id})">Delete</button>
+                <button onclick="deleteTask(${task.id})">Delete</button>
                 <button onclick="moveTask(${task.id})">Completed</button>
             `;
             current.appendChild(taskCard);
@@ -99,7 +97,7 @@ function renderTasks() {
             taskCard.innerHTML = `
                 <h3>${task.title}</h3>
                 <p>${task.description}</p>
-                <button onClick="deleteTask(${task.id})">Delete</button>
+                <button onclick="deleteTask(${task.id})">Delete</button>
             `;
             completed.appendChild(taskCard);
         }
@@ -138,18 +136,26 @@ function moveTask(taskId) {
     renderTasks();
 }
 
-function updateTaskStatus(newStatus){
-    const draggedTaskId = Number(localStorage.getItem("draggedTaskId"));
-    const task = tasks.find(task => task.id === draggedTaskId);
-
-    if(task){
-        task.status = newStatus;
+function updateTaskStatus(status) {
+    const taskId = localStorage.getItem("draggedTaskId");
+    const task = tasks.find(task => task.id == taskId);
+    if (task) {
+        task.status = status;
         saveTasks();
         renderTasks();
     }
 }
 
-function fn_renderTasks_clean() {}
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
+        renderTasks();
+    }
+}
 
 loadTasks();
-renderTasks();
