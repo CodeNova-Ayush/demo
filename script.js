@@ -54,13 +54,26 @@ completedCol.addEventListener("drop", () => {
     updateTaskStatus("completed");
 });
 
-function updateTaskStatus(status) {
-    const taskId = localStorage.getItem("draggedTaskId");
-    const task = tasks.find(task => task.id == taskId);
-    if (task) {
-        task.status = status;
-        saveTasks();
-        renderTasks();
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
+    }
+}
+
+function updateTaskStatus(newStatus) {
+    const draggedTaskId = localStorage.getItem("draggedTaskId");
+    if (draggedTaskId) {
+        const task = tasks.find(task => task.id == draggedTaskId);
+        if (task) {
+            task.status = newStatus;
+            saveTasks();
+            renderTasks();
+        }
     }
 }
 
@@ -139,17 +152,3 @@ function moveTask(taskId, newStatus) {
         renderTasks();
     }
 }
-
-function saveTasks() {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-function loadTasks() {
-    const savedTasks = localStorage.getItem("tasks");
-    if (savedTasks) {
-        tasks = JSON.parse(savedTasks);
-    }
-}
-
-loadTasks();
-renderTasks();
