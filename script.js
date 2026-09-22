@@ -96,25 +96,30 @@ function renderTasks() {
             taskCard.classList.remove("dragging");
         });
 
-        taskCard.innerHTML = `
-            <h3>${task.title}</h3>
-            <p>${task.description}</p>
-            <button onclick="editTask(${task.id})">Edit</button>
-            <button onClick="deleteTask(${task.id})">Delete</button>
-            <button onclick="moveTask(${task.id})">Move</button>
-        `;
-
         if (task.status === "todo") {
+            taskCard.innerHTML = `
+                <h3>${task.title}</h3>
+                <p>${task.description}</p>
+                <button onclick="editTask(${task.id})">Edit</button>
+                <button onclick="deleteTask(${task.id})">Delete</button>
+                <button onclick="moveTask(${task.id}, 'current')">Move to Current Task</button>
+            `;
             todo.appendChild(taskCard);
         }
         else if (task.status === "current") {
+            taskCard.innerHTML = `
+                <h3>${task.title}</h3>
+                <p>${task.description}</p>
+                <button onclick="deleteTask(${task.id})">Delete</button>
+                <button onclick="moveTask(${task.id}, 'completed')">Completed</button>
+            `;
             current.appendChild(taskCard);
         }
         else if (task.status === "completed") {
             taskCard.innerHTML = `
                 <h3>${task.title}</h3>
                 <p>${task.description}</p>
-                <button onClick="deleteTask(${task.id})">Delete</button>
+                <button onclick="deleteTask(${task.id})">Delete</button>
             `;
             completed.appendChild(taskCard);
         }
@@ -139,22 +144,11 @@ function editTask(taskId) {
     renderTasks();
 }
 
-function moveTask(taskId) {
+function moveTask(taskId, newStatus) {
     const task = tasks.find(task => task.id === taskId);
-
-    if (task.status === "todo") {
-        task.status = "current";
+    if (task) {
+        task.status = newStatus;
+        saveTasks();
+        renderTasks();
     }
-    else if (task.status === "current") {
-        task.status = "completed";
-    }
-    else if (task.status === "completed") {
-        task.status = "todo";
-    }
-
-    saveTasks();
-    renderTasks();
 }
-
-loadTasks();
-renderTasks();
