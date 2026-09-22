@@ -152,3 +152,6 @@ function moveTask(taskId, newStatus) {
         renderTasks();
     }
 }
+
+loadTasks();
+renderTasks();
